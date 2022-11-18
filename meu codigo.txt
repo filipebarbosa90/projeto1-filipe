@@ -1,2 +1,5 @@
-Olá meu nome é Filipe
-Olá eu sou uma nova linha
+Alteração de funcionalidades, texto editado;
+Linha 2 inserida, texto editado;
+Linha 3 inserida, texto novo;
+Linha 4 inserida, texto novo;
+Linha 5 inserida, texto novo;

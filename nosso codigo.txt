@@ -1,1 +1,5 @@
-Se eu sou você e você é eu, quem somos nós?
+Nosso código, linha 1 editada;
+Linha 2 inserida;
+Linha 3 inserida;
+Linha 4 inserida;
+Linha 5 inserida;
