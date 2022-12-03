@@ -76,6 +76,8 @@ resource "azurerm_subnet" "subnet5" {
   address_prefixes = ["10.0.5.0/24"]
   
 }
+
+#Criando interface de rede da Máquina Virtual
 resource "azurerm_network_interface" "default" {
   name                = "${var.vm}-nic"
   location            = var.locat
@@ -87,7 +89,7 @@ resource "azurerm_network_interface" "default" {
     private_ip_address_allocation = "Dynamic"
   }
 }
-
+# Criando a máquina virtual
 resource "azurerm_virtual_machine" "main" {
   name                  = "${var.vm}-01"
   location              = var.locat
@@ -95,16 +97,12 @@ resource "azurerm_virtual_machine" "main" {
   network_interface_ids = [azurerm_network_interface.default.id]
   vm_size               = "Standard_DS1_v2"
 
-  # Uncomment this line to delete the OS disk automatically when deleting the VM
-  # delete_os_disk_on_termination = true
 
-  # Uncomment this line to delete the data disks automatically when deleting the VM
-  # delete_data_disks_on_termination = true
 
   storage_image_reference {
     publisher = "Canonical"
     offer     = "UbuntuServer"
-    sku       = "22.04.1-LTS"
+    sku       = "16.04-LTS"
     version   = "latest"
   }
   storage_os_disk {
@@ -117,6 +115,7 @@ resource "azurerm_virtual_machine" "main" {
     computer_name  = "${var.vm}"
     admin_username = "admfilipe"
     admin_password = "P$WTAsfgssword1234!"
+    #OBS: Estudar melhores práticas de segurança para não inserir a senha no projeto
   }
   os_profile_linux_config {
     disable_password_authentication = false
