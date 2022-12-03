@@ -13,7 +13,7 @@ provider "azurerm" {
 }
 
 resource "azurerm_resource_group" "default" {
-name = "rg-filpe-iac"  
+name = "rg-filipe-iac"  
 location = "eastus"
 tags = {
   "env" = "staging"
