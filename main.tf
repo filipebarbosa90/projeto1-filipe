@@ -121,4 +121,48 @@ resource "azurerm_virtual_machine" "main" {
     disable_password_authentication = false
   }
 }
+#Criando interface de rede da Máquina Virtual
+resource "azurerm_network_interface" "dev" {
+  name                = "${var.vm}dev-nic"
+  location            = var.locat
+  resource_group_name = var.rg
+
+  ip_configuration {
+    name                          = "${var.vm}dev-ipconfig"
+    subnet_id                     = azurerm_subnet.internal.id
+    private_ip_address_allocation = "Dynamic"
+  }
+}
+# Criando a máquina virtual
+resource "azurerm_virtual_machine" "dev" {
+  name                  = "${var.vm}-02"
+  location              = var.locat
+  resource_group_name   = var.rg
+  network_interface_ids = [azurerm_network_interface.dev.id]
+  vm_size               = "Standard_DS1_v2"
+
+
+
+  storage_image_reference {
+    publisher = "Canonical"
+    offer     = "UbuntuServer"
+    sku       = "16.04-LTS"
+    version   = "latest"
+  }
+  storage_os_disk {
+    name              = "${var.vm}02-osdisk"
+    caching           = "ReadWrite"
+    create_option     = "FromImage"
+    managed_disk_type = "Standard_LRS"
+  }
+  os_profile {
+    computer_name  = "${var.vm}-dev"
+    admin_username = "admfilipe"
+    admin_password = "P$WTAsfgssword1234!"
+    #OBS: Estudar melhores práticas de segurança para não inserir a senha no projeto
+  }
+  os_profile_linux_config {
+    disable_password_authentication = false
+  }
+}
 
