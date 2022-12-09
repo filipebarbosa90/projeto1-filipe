@@ -14,3 +14,11 @@ variable "vm" {
 default = "vmfilipeiac"
 
 }
+variable "databricks" {
+default = "databrickfilipeiac"
+
+}
+variable "database" {
+default = "banco-prd"
+
+}

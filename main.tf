@@ -166,3 +166,121 @@ resource "azurerm_virtual_machine" "dev" {
   }
 }
 
+#Criando interface de rede da Máquina Virtual AD
+resource "azurerm_network_interface" "ad" {
+  name                = "${var.vm}03-nic"
+  location            = var.locat
+  resource_group_name = var.rg
+
+  ip_configuration {
+    name                          = "${var.vm}03-ipconfig"
+    subnet_id                     = azurerm_subnet.internal.id
+    private_ip_address_allocation = "Dynamic"
+  }
+}
+
+resource "azurerm_windows_virtual_machine" "ad" {
+  name                = "${var.vm}-03"
+  resource_group_name = var.rg
+  location            = var.locat
+  size                = "Standard_F2"
+  admin_username      = "adminuser"
+  admin_password      = "P@$$w0rd1234!"
+  network_interface_ids = [azurerm_network_interface.ad.id]
+
+  os_disk {
+    caching              = "ReadWrite"
+    storage_account_type = "Standard_LRS"
+  }
+
+  source_image_reference {
+    publisher = "MicrosoftWindowsServer"
+    offer     = "WindowsServer"
+    sku       = "2016-Datacenter"
+    version   = "latest"
+  }
+}
+
+#Criando interface de rede da Máquina Virtual AD2
+resource "azurerm_network_interface" "ad2" {
+  name                = "${var.vm}04-nic"
+  location            = var.locat
+  resource_group_name = var.rg
+
+  ip_configuration {
+    name                          = "${var.vm}04-ipconfig"
+    subnet_id                     = azurerm_subnet.internal.id
+    private_ip_address_allocation = "Dynamic"
+  }
+}
+
+resource "azurerm_windows_virtual_machine" "ad2" {
+  name                = "${var.vm}-04"
+  resource_group_name = var.rg
+  location            = var.locat
+  size                = "Standard_F2"
+  admin_username      = "adminuser"
+  admin_password      = "P@$$w0rd1234!"
+  network_interface_ids = [azurerm_network_interface.ad2.id]
+
+  os_disk {
+    name              = "${var.vm}04-osdisk"
+    caching              = "ReadWrite"
+    storage_account_type = "Standard_LRS"
+  }
+
+  source_image_reference {
+    publisher = "MicrosoftWindowsServer"
+    offer     = "WindowsServer"
+    sku       = "2019-Datacenter"
+    version   = "latest"
+  }
+}
+
+#resource "azurerm_resource_group" "example" {
+#  name     = "example-resources"
+#  location = var.locat
+#}
+
+resource "azurerm_databricks_workspace" "databrickfilipeiac" {
+  name                = var.databricks
+  resource_group_name = var.rg
+  location            = var.locat
+  sku                 = "standard"
+
+  tags = {
+  "env" = "staging"
+  "project": "filipe-barbosa"
+}
+}
+
+#resource "azurerm_resource_group" "banco" {
+#  name     = var.rg
+#  location = var.locat
+#}
+
+
+resource "azurerm_postgresql_server" "banco" {
+  name                = var.database
+  location            = var.locat
+  resource_group_name = var.rg
+
+  sku_name = "B_Gen5_2"
+
+  storage_mb                   = 5120
+  backup_retention_days        = 7
+  geo_redundant_backup_enabled = false
+  auto_grow_enabled            = true
+
+  administrator_login          = "psqladmin"
+  administrator_login_password = "H@Sh1CoR3!"
+  version                      = "9.5"
+  ssl_enforcement_enabled      = true
+}
+
+resource "azurerm_postgresql_configuration" "banco" {
+  name                = "backslash_quote"
+  resource_group_name = var.rg
+  server_name         = azurerm_postgresql_server.banco.name
+  value               = "on"
+}
