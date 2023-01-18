@@ -242,7 +242,7 @@ resource "azurerm_windows_virtual_machine" "ad2" {
 #  location = var.locat
 #}
 
-resource "azurerm_databricks_workspace" "databrickfilipeiac" {
+/*resource "azurerm_databricks_workspace" "databrickfilipeiac" {
   name                = var.databricks
   resource_group_name = var.rg
   location            = var.locat
@@ -252,7 +252,7 @@ resource "azurerm_databricks_workspace" "databrickfilipeiac" {
   "env" = "staging"
   "project": "filipe-barbosa"
 }
-}
+}*/
 
 #resource "azurerm_resource_group" "banco" {
 #  name     = var.rg
@@ -260,7 +260,7 @@ resource "azurerm_databricks_workspace" "databrickfilipeiac" {
 #}
 
 
-resource "azurerm_postgresql_server" "banco" {
+/*resource "azurerm_postgresql_server" "banco" {
   name                = var.database
   location            = var.locat
   resource_group_name = var.rg
@@ -283,4 +283,4 @@ resource "azurerm_postgresql_configuration" "banco" {
   resource_group_name = var.rg
   server_name         = azurerm_postgresql_server.banco.name
   value               = "on"
-}
+}*/
